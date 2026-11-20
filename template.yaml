@@ -1,0 +1,90 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: Serverless Resume API using AWS Lambda, API Gateway and DynamoDB
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 15
+    MemorySize: 128
+
+Resources:
+
+  # DynamoDB Resume Table
+  ResumeTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ResumeData
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+
+  # API Gateway
+  ResumeApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: ServerlessResumeAPI
+      StageName: Prod
+      Auth:
+        ApiKeyRequired: true
+        UsagePlan:
+          CreateUsagePlan: PER_API
+          UsagePlanName: ResumeApiUsagePlan
+          Throttle:
+            BurstLimit: 5
+            RateLimit: 10
+          Quota:
+            Limit: 1000
+            Period: MONTH
+
+  # Lambda Function
+  ResumeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ServerlessResumeFunction
+      CodeUri: src/
+      Handler: lambda_function.lambda_handler
+      Environment:
+        Variables:
+          RESUME_TABLE: !Ref ResumeTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref ResumeTable
+      Events:
+        ResumeRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ResumeApi
+            Path: /resume
+            Method: GET
+
+        ResumeSections:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ResumeApi
+            Path: /resume/{section}
+            Method: GET
+
+Outputs:
+
+  ResumeApiURL:
+    Description: Resume API Endpoint
+    Value: !Sub "https://${ResumeApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+
+  ResumeTableName:
+    Description: DynamoDB Table Name
+    Value: !Ref ResumeTable
+
+  LambdaFunctionName:
+    Description: Lambda Function Name
+    Value: !Ref ResumeFunction
+    

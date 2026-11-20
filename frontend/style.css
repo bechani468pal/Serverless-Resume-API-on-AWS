@@ -1,0 +1,169 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.header {
+    background: #172554;
+    color: white;
+    text-align: center;
+    padding: 30px 15px;
+}
+
+.header h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.container {
+    max-width: 1150px;
+    margin: 30px auto;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    align-items: start;
+}
+
+.form-section,
+.preview-section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #172554;
+}
+
+h3 {
+    margin: 22px 0 12px;
+    color: #2563eb;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+textarea {
+    min-height: 85px;
+    resize: vertical;
+}
+
+button {
+    border: none;
+    padding: 12px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px 0 12px;
+}
+
+.primary {
+    background: #2563eb;
+    color: white;
+    width: 100%;
+}
+
+.secondary {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+.dynamic-item {
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+#resumePreview {
+    min-height: 300px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    overflow-wrap: anywhere;
+}
+
+#resumePreview h1 {
+    color: #172554;
+    margin-bottom: 8px;
+}
+
+#resumePreview h3 {
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 6px;
+}
+
+#resumePreview p,
+#resumePreview li {
+    margin: 7px 0;
+    line-height: 1.5;
+}
+
+#resumePreview ul {
+    padding-left: 22px;
+}
+
+#message {
+    margin-top: 12px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 750px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media print {
+    body {
+        background: white;
+    }
+
+    .header,
+    .form-section,
+    .preview-section > h2,
+    #downloadPDF,
+    #message {
+        display: none !important;
+    }
+
+    .container {
+        display: block;
+        margin: 0;
+        padding: 0;
+        max-width: none;
+    }
+
+    .preview-section {
+        box-shadow: none;
+        padding: 0;
+    }
+
+    #resumePreview {
+        border: none;
+        padding: 0;
+    }
+}
